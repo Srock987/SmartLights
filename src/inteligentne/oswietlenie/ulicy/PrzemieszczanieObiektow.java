@@ -70,6 +70,17 @@ public class PrzemieszczanieObiektow {
         }
 
         odrysujLatarnie(graf);
+
+        Object wezelNadrzedny = graf.getDefaultParent();
+        for (Entry<String, Wierzcholek> para : OknoGlowne.mapaPowiazanWierzcholkow.entrySet()) {
+            String nazwaLatarni = para.getKey();
+            Wierzcholek wierzcholek = para.getValue();
+            if (wierzcholek.jestLatarnia) {
+                graf.removeCells(new Object[]{wierzcholek.obiekt});
+                wierzcholek.obiekt = graf.insertVertex(wezelNadrzedny, wierzcholek.nazwaWierzcholka, ObslugaTresciWierzcholkow.zwrocTrescLatari(nazwaLatarni, wierzcholek.natezenieSwiatla, wierzcholek.mocLatarni), wierzcholek.x, wierzcholek.y, Konfiguracja.wymiaryLatarni, Konfiguracja.wymiaryLatarni, "");
+                OknoGlowne.mapaPowiazanWierzcholkow.put(nazwaLatarni, wierzcholek);
+            }
+        }
         graf.getModel().endUpdate();
     }
 

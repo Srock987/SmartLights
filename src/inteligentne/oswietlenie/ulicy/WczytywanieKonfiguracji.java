@@ -44,9 +44,9 @@ public class WczytywanieKonfiguracji {
 		
 		ParsowanieStrukturyGrafu parsowanieStrukturyGrafu = new ParsowanieStrukturyGrafu();
 		
-		System.out.println("PARSOWANIE WIERZCHO£KÓW");
+		System.out.println("PARSOWANIE WIERZCHOï¿½Kï¿½W");
 		parsowanieStrukturyGrafu.parsujWierzchlki(listaWierzcholkow, graf);
-		System.out.println("PARSOWANIE KRAWÊDZI");
+		System.out.println("PARSOWANIE KRAWï¿½DZI");
 		ParsowanieStrukturyGrafu.parsujKrawedzie(listaKrawedzi, graf);
 		OknoGlowne.mapaPowiazanWierzcholkow = parsowanieStrukturyGrafu.pobierzMapePowiazanWierzcholkow();
 		System.out.println("PARSOWANIE TRAS");
