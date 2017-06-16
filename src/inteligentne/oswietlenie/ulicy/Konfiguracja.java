@@ -4,7 +4,7 @@ public class Konfiguracja {
     public static final double dlugoscGeograficzna = 19.57;
     public static final double szerokoscGeograficzna = 50.03;
 	public static int czasOdswiezaniaWMilisekundach = 1000;
-    public static double zakresNatezeniaSwiatla = 150;
+    public static double zakresNatezeniaSwiatla = 100;
     public static String nazwaAgentaZegaraAstronomicznego = "AgentZegarAstronomiczny";
     public static int przyrostCzasu = 10;
     public static double maxZasiegPodczerwieni = 100;
@@ -16,6 +16,11 @@ public class Konfiguracja {
     public static int wymiaryPrzemieszczajacegoSieObiektu = 25;
     public static double predkoscSamochodu = 0.55;		//pikseli na sekunde
     public static double predkoscPieszego = 0.15;		//pikseli na sekunde
+
+    //Parametry do modulu sterujacego
+    public static int wpolczynnikMocyNajbliższejLatarni = 2;
+    public static int odlegloscWylaczeniaLatarni = 100;
+    public static int odlegloscZalaczeniaLatarni = 400;
 
     //
     //PRZEDROSTKI I KOMENDY DO WYWOLANIA Z KONSOLI

@@ -138,7 +138,7 @@ public class PrzemieszczanieObiektow {
     }
 
     private void poinformujCzujnikiOOdleglosciOdPojazdu(Trasa trasa, HashMap<String, Wierzcholek> mapaPowiazanWierzcholkow, AgentInterfejsu agentInterfejsu) {
-        int nrLatarniPrzedPojazdem = trasa.nrWierzcholkaDoktoregoDazy;
+         int nrLatarniPrzedPojazdem = trasa.nrWierzcholkaDoktoregoDazy;
         int nrLatarniZaPojazdem = trasa.nrWierzcholkaDoktoregoDazy - 1;
         if (nrLatarniZaPojazdem < 0) {
             nrLatarniZaPojazdem = trasa.listaWezlow.size() - 1;

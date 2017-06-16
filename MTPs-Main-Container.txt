@@ -1,1 +1,1 @@
-http://LapekMsi:7778/acc
+http://HP-PC.home:7778/acc
