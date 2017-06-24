@@ -18,21 +18,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
+import javax.swing.*;
 import javax.swing.JFormattedTextField.AbstractFormatter;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import javafx.scene.control.ProgressBar;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -216,7 +206,8 @@ public class OknoGlowne extends JFrame {
                     etykietaZmianyDatyPrzerwa.setAlignmentX(Component.CENTER_ALIGNMENT);
                     panelZmianyDaty.add(etykietaZmianyDatyPrzerwa);
 
-                    UtilDateModel model = new UtilDateModel();
+
+                    UtilDateModel model = new UtilDateModel(struktCzas.getCzas().getTime());
                     Properties p = new Properties();
                     p.put("text.today", "Dzin");
                     p.put("text.month", "Miesiac");
@@ -305,7 +296,20 @@ public class OknoGlowne extends JFrame {
                         wiadomosc.addReceiver(odbiorca);
                         wiadomosc.setContent("URUCHOM");
 
+                        final JFrame oknoOczekiwania = new JFrame();
+
                         if (pierwszyRaz) {
+                            oknoOczekiwania.setBounds(500, 200, 400, 200);
+                            oknoOczekiwania.setTitle("Rozpoczynanie symulacji");
+                            JProgressBar progressBar = new JProgressBar(0,100);
+                            progressBar.setValue(50);
+                            progressBar.setStringPainted(true);
+                            progressBar.setVisible(true);
+                            oknoOczekiwania.getContentPane().setLayout(new BorderLayout(0, 0));
+                            JLabel pleaseWaitLabel = new JLabel("Proszę czekać...");
+                            oknoOczekiwania.getContentPane().add(progressBar);
+                            oknoOczekiwania.getContentPane().add(pleaseWaitLabel);
+                            oknoOczekiwania.setVisible(true);
                             try {
                                 Thread.sleep((long) (2 * Konfiguracja.czasOdswiezaniaWMilisekundach));
                             } catch (InterruptedException e1) {
@@ -322,6 +326,8 @@ public class OknoGlowne extends JFrame {
                                 e1.printStackTrace();
                             }
                             pierwszyRaz = false;
+                            oknoOczekiwania.setVisible(false);
+                            oknoOczekiwania.dispose();
                         }
                     }
                   Logger.info("End of starting simulation, time spend: "

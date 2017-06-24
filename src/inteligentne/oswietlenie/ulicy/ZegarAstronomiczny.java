@@ -18,11 +18,11 @@ public class ZegarAstronomiczny{
 		return !(biezacaData.getTime().after(godzinaWschodu) && (biezacaData.getTime().before(godzinaZachodu)));
 	}
 
-	private static Date godzinaWschodu(Calendar data){
+	public static Date godzinaWschodu(Calendar data){
 		return obliczGodzine(PoraDnia.WSCHOD, data);
 	}
 
-	private static Date godzinaZachodu(Calendar data){
+	public static Date godzinaZachodu(Calendar data){
 		return obliczGodzine(PoraDnia.ZACHOD, data);
 	}
 	

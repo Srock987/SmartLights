@@ -4,6 +4,8 @@ import inteligentne.oswietlenie.ulicy.HighLevelAgents.CzujnikNatezeniaOswietleni
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
+import java.util.Calendar;
+
 public class SterownikCzujnikaNatezeniaOswietlenia extends TickerBehaviour {
 	private static final long serialVersionUID = 1L;
 	private CzujnikNatezeniaOswietlenia czujnikNatezeniaOswietlenia;
@@ -21,17 +23,41 @@ public class SterownikCzujnikaNatezeniaOswietlenia extends TickerBehaviour {
 	@Override
 	protected void onTick() {
 		ACLMessage wiadomosc = czujnikNatezeniaOswietlenia.receive();
-		
-		if(wiadomosc != null) {
+
+		if (wiadomosc != null) {
 			String strCzas = wiadomosc.getContent();
 			StrukturaCzas struktCzas = new StrukturaCzas(strCzas);
-			
-			if(struktCzas.jestDzien) {
-				czujnikNatezeniaOswietlenia.ustawNatezenieOswietlenia((int)Math.round((1 - OknoGlowne.procentZachmurzenia) * Konfiguracja.zakresNatezeniaSwiatla));
+
+			Calendar currentDate = struktCzas.getCzas();
+			Calendar sunUpDate = Calendar.getInstance();
+			sunUpDate.setTime(ZegarAstronomiczny.godzinaWschodu(struktCzas.getCzas()));
+			Calendar sunDownDate = Calendar.getInstance();
+			sunDownDate.setTime(ZegarAstronomiczny.godzinaZachodu(struktCzas.getCzas()));
+
+			float currentMinute = currentDate.get(Calendar.HOUR_OF_DAY) * 60 + currentDate.get(Calendar.MINUTE);
+			float sunUp = sunUpDate.get(Calendar.HOUR_OF_DAY) * 60 + sunUpDate.get(Calendar.MINUTE);
+			float sunDown = sunDownDate.get(Calendar.HOUR_OF_DAY) * 60 + sunDownDate.get(Calendar.MINUTE);
+
+			float wspolczynnikSwiatla;
+
+			if (Math.abs(currentMinute - sunDown) < 45) {
+				wspolczynnikSwiatla = (45 + (sunDown - currentMinute)) / 90;
+			} else if (Math.abs(currentMinute - sunUp) < 45)
+				wspolczynnikSwiatla = (45 + (currentMinute - sunUp)) / 90;
+			else
+				wspolczynnikSwiatla = -1;
+
+			if (wspolczynnikSwiatla != -1)
+				czujnikNatezeniaOswietlenia.ustawNatezenieOswietlenia((int)
+						Math.round((1 - OknoGlowne.procentZachmurzenia) * Konfiguracja.zakresNatezeniaSwiatla * wspolczynnikSwiatla));
+			else if (struktCzas.jestDzien) {
+
+				czujnikNatezeniaOswietlenia.ustawNatezenieOswietlenia((int)
+						Math.round((1 - OknoGlowne.procentZachmurzenia) * Konfiguracja.zakresNatezeniaSwiatla));
 			} else {
 				czujnikNatezeniaOswietlenia.ustawNatezenieOswietlenia(0);
 			}
-			
+
 			poinformujOdbiorcow();
 		}
 	}
