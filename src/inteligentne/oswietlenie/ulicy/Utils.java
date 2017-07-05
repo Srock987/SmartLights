@@ -21,7 +21,12 @@ public class Utils {
 
 	public static String getColorIntensityString(int power){
 	    double powerValue = power/100d;
-	    double blue = 1.0 - powerValue;
+	    double blue = 1.0d - powerValue;
+	    if (blue > 1.0d){
+	    	blue = 1.0d;
+		}else if (blue < 0.0d){
+	    	blue = 0.0d;
+		}
 		Color color = new Color(1,1,blue,0);
 		return toRGBCode(color);
 	}

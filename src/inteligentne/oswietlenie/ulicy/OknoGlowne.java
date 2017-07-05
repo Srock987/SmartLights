@@ -3,6 +3,7 @@ package inteligentne.oswietlenie.ulicy;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import inteligentne.oswietlenie.ulicy.HighLevelAgents.ZegarSymulacji;
+import inteligentne.oswietlenie.ulicy.utils.WaitFrame;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import java.awt.BorderLayout;
@@ -22,7 +23,6 @@ import javax.swing.*;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.border.EmptyBorder;
 
-import javafx.scene.control.ProgressBar;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -296,38 +296,26 @@ public class OknoGlowne extends JFrame {
                         wiadomosc.addReceiver(odbiorca);
                         wiadomosc.setContent("URUCHOM");
 
-                        final JFrame oknoOczekiwania = new JFrame();
-
+                        WaitFrame waitFrame = new WaitFrame();
                         if (pierwszyRaz) {
-                            oknoOczekiwania.setBounds(500, 200, 400, 200);
-                            oknoOczekiwania.setTitle("Rozpoczynanie symulacji");
-                            JProgressBar progressBar = new JProgressBar(0,100);
-                            progressBar.setValue(50);
-                            progressBar.setStringPainted(true);
-                            progressBar.setVisible(true);
-                            oknoOczekiwania.getContentPane().setLayout(new BorderLayout(0, 0));
-                            JLabel pleaseWaitLabel = new JLabel("Proszę czekać...");
-                            oknoOczekiwania.getContentPane().add(progressBar);
-                            oknoOczekiwania.getContentPane().add(pleaseWaitLabel);
-                            oknoOczekiwania.setVisible(true);
-                            try {
-                                Thread.sleep((long) (2 * Konfiguracja.czasOdswiezaniaWMilisekundach));
-                            } catch (InterruptedException e1) {
-                                e1.printStackTrace();
-                            }
+                            waitFrame.showFrame();
+//                            try {
+//                                Thread.sleep((long) (2 * Konfiguracja.czasOdswiezaniaWMilisekundach));
+//                            } catch (InterruptedException e1) {
+//                                e1.printStackTrace();
+//                            }
                         }
                         AgentInterfejsu.agentInterfejsu.send(wiadomosc);
                         symulacjaUruchomiona = true;
 
                         if (pierwszyRaz) {
-                            try {
-                                Thread.sleep((long) (2 * Konfiguracja.czasOdswiezaniaWMilisekundach));
-                            } catch (InterruptedException e1) {
-                                e1.printStackTrace();
-                            }
+//                            try {
+//                                Thread.sleep((long) (2 * Konfiguracja.czasOdswiezaniaWMilisekundach));
+//                            } catch (InterruptedException e1) {
+//                                e1.printStackTrace();
+//                            }
                             pierwszyRaz = false;
-                            oknoOczekiwania.setVisible(false);
-                            oknoOczekiwania.dispose();
+                            waitFrame.closeFrame();
                         }
                     }
                   Logger.info("End of starting simulation, time spend: "
