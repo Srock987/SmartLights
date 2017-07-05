@@ -4,16 +4,20 @@ import inteligentne.oswietlenie.ulicy.HighLevelAgents.CzujnikNatezeniaOswietleni
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class SterownikCzujnikaNatezeniaOswietlenia extends TickerBehaviour {
 	private static final long serialVersionUID = 1L;
 	private CzujnikNatezeniaOswietlenia czujnikNatezeniaOswietlenia;
+
 	public SterownikCzujnikaNatezeniaOswietlenia(CzujnikNatezeniaOswietlenia czujnikNatezeniaOswietlenia, long okres) {
 		super(czujnikNatezeniaOswietlenia, okres);
 		this.czujnikNatezeniaOswietlenia = czujnikNatezeniaOswietlenia;
 	}
-	
+
 	private void poinformujOdbiorcow() {
 		//
 		//TO DO
