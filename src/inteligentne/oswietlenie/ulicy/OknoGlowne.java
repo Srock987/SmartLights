@@ -3,6 +3,7 @@ package inteligentne.oswietlenie.ulicy;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import inteligentne.oswietlenie.ulicy.HighLevelAgents.ZegarSymulacji;
+import inteligentne.oswietlenie.ulicy.utils.WaitFrame;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import java.awt.BorderLayout;
@@ -18,21 +19,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
+import javax.swing.*;
 import javax.swing.JFormattedTextField.AbstractFormatter;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -216,7 +206,8 @@ public class OknoGlowne extends JFrame {
                     etykietaZmianyDatyPrzerwa.setAlignmentX(Component.CENTER_ALIGNMENT);
                     panelZmianyDaty.add(etykietaZmianyDatyPrzerwa);
 
-                    UtilDateModel model = new UtilDateModel();
+
+                    UtilDateModel model = new UtilDateModel(struktCzas.getCzas().getTime());
                     Properties p = new Properties();
                     p.put("text.today", "Dzin");
                     p.put("text.month", "Miesiac");
@@ -305,23 +296,26 @@ public class OknoGlowne extends JFrame {
                         wiadomosc.addReceiver(odbiorca);
                         wiadomosc.setContent("URUCHOM");
 
+                        WaitFrame waitFrame = new WaitFrame();
                         if (pierwszyRaz) {
-                            try {
-                                Thread.sleep((long) (2 * Konfiguracja.czasOdswiezaniaWMilisekundach));
-                            } catch (InterruptedException e1) {
-                                e1.printStackTrace();
-                            }
+                            waitFrame.showFrame();
+//                            try {
+//                                Thread.sleep((long) (2 * Konfiguracja.czasOdswiezaniaWMilisekundach));
+//                            } catch (InterruptedException e1) {
+//                                e1.printStackTrace();
+//                            }
                         }
                         AgentInterfejsu.agentInterfejsu.send(wiadomosc);
                         symulacjaUruchomiona = true;
 
                         if (pierwszyRaz) {
-                            try {
-                                Thread.sleep((long) (2 * Konfiguracja.czasOdswiezaniaWMilisekundach));
-                            } catch (InterruptedException e1) {
-                                e1.printStackTrace();
-                            }
+//                            try {
+//                                Thread.sleep((long) (2 * Konfiguracja.czasOdswiezaniaWMilisekundach));
+//                            } catch (InterruptedException e1) {
+//                                e1.printStackTrace();
+//                            }
                             pierwszyRaz = false;
+                            waitFrame.closeFrame();
                         }
                     }
                   Logger.info("End of starting simulation, time spend: "

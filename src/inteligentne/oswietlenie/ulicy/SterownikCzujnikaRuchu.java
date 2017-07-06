@@ -11,7 +11,7 @@ public class SterownikCzujnikaRuchu extends CyclicBehaviour {
 
     private CzujnikRuchu czujnik;
     private static final long serialVersionUID = 1L;
-    private static final int maxZasiegCzujnika = 500;
+    private static final int maxZasiegCzujnika = 5000;
 
     public SterownikCzujnikaRuchu(CzujnikRuchu czujnik) {
         this.czujnik = czujnik;

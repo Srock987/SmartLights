@@ -1,9 +1,12 @@
 package inteligentne.oswietlenie.ulicy;
 
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
+import com.mxgraph.view.mxStylesheet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 @SuppressWarnings("ALL")
 public class ParsowanieStrukturyGrafu {
@@ -11,6 +14,8 @@ public class ParsowanieStrukturyGrafu {
 
     public void parsujWierzchlki(ArrayList<String> listaWierzcholkow, mxGraph graf) {
         Object wezelNadrzedny = graf.getDefaultParent();
+
+        styleGraph(graf);
 
         for (int i = 0; i < listaWierzcholkow.size(); ++i) {
             String[] listaTokenow = listaWierzcholkow.get(i).split(" ");
@@ -23,7 +28,7 @@ public class ParsowanieStrukturyGrafu {
             wierzcholek.natezenieSwiatla = 100;
             wierzcholek.mocLatarni = 0;
             wierzcholek.obiekt = graf.insertVertex(wezelNadrzedny, nazwaWierzholka, ObslugaTresciWierzcholkow.zwrocTrescLatari(nazwaWierzholka, wierzcholek.natezenieSwiatla,
-                    wierzcholek.mocLatarni), x, y, Konfiguracja.wymiaryLatarni, Konfiguracja.wymiaryLatarni, "");
+                    wierzcholek.mocLatarni), x, y, Konfiguracja.wymiaryLatarni, Konfiguracja.wymiaryLatarni, "CIRCLE");
             wierzcholek.x = x;
             wierzcholek.y = y;
             wierzcholek.nazwaWierzcholka = nazwaWierzholka;
@@ -93,6 +98,15 @@ public class ParsowanieStrukturyGrafu {
 
             przemieszczanieObiektow.dodajTrase(trasa);
         }
+    }
+
+    private void styleGraph(mxGraph graph){
+        mxStylesheet stylesheet = graph.getStylesheet();
+        Hashtable<String, Object> style = new Hashtable<String, Object>();
+        style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
+        style.put(mxConstants.STYLE_OPACITY, 50);
+        style.put(mxConstants.STYLE_FONTCOLOR, "#774400");
+        stylesheet.putCellStyle("CIRCLE", style);
     }
 
     public HashMap<String, Wierzcholek> pobierzMapePowiazanWierzcholkow() {

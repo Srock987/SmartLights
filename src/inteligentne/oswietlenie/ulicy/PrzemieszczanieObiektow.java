@@ -130,7 +130,8 @@ public class PrzemieszczanieObiektow {
             Wierzcholek wierzcholek = para.getValue();
             if (wierzcholek.jestLatarnia) {
                 graf.removeCells(new Object[]{wierzcholek.obiekt});
-                wierzcholek.obiekt = graf.insertVertex(wezelNadrzedny, wierzcholek.nazwaWierzcholka, ObslugaTresciWierzcholkow.zwrocTrescLatari(nazwaLatarni, wierzcholek.natezenieSwiatla, wierzcholek.mocLatarni), wierzcholek.x, wierzcholek.y, Konfiguracja.wymiaryLatarni, Konfiguracja.wymiaryLatarni, "");
+                String style = "CIRCLE;fillColor="+Utils.getColorIntensityString(wierzcholek.mocLatarni);
+                wierzcholek.obiekt = graf.insertVertex(wezelNadrzedny, wierzcholek.nazwaWierzcholka, ObslugaTresciWierzcholkow.zwrocTrescLatari(nazwaLatarni, wierzcholek.natezenieSwiatla, wierzcholek.mocLatarni), wierzcholek.x, wierzcholek.y, Konfiguracja.wymiaryLatarni, Konfiguracja.wymiaryLatarni, style);
                 OknoGlowne.mapaPowiazanWierzcholkow.put(nazwaLatarni, wierzcholek);
             }
         }
@@ -175,6 +176,34 @@ public class PrzemieszczanieObiektow {
                 nrLatarniZaPojazdem = trasa.listaWezlow.size() - 1;
             }
         }
+    }
+
+    private void ponformujLatarnie(Trasa trasa, HashMap<String, Wierzcholek> mapaPowiazanWierzcholkow, AgentInterfejsu agentInterfejsu,int nrLatarniZaPojazdem,int nrLatarniPrzedPojazdem,double rzeczywisteXPojazdu, double rzeczywisteYPojazdu){
+        int rzeczywisteXLatarniPrzedPojazdem = mapaPowiazanWierzcholkow.get(trasa.listaWezlow.get(nrLatarniPrzedPojazdem)).x + (Konfiguracja.wymiaryLatarni / 2);
+        int rzeczywisteYLatarniPrzedPojazdem = mapaPowiazanWierzcholkow.get(trasa.listaWezlow.get(nrLatarniPrzedPojazdem)).y + (Konfiguracja.wymiaryLatarni / 2);
+
+        int rzeczywisteXLatarniZaPojazdem = mapaPowiazanWierzcholkow.get(trasa.listaWezlow.get(nrLatarniZaPojazdem)).x + (Konfiguracja.wymiaryLatarni / 2);
+        int rzeczywisteYLatarniZaPojazdem = mapaPowiazanWierzcholkow.get(trasa.listaWezlow.get(nrLatarniZaPojazdem)).y + (Konfiguracja.wymiaryLatarni / 2);
+
+        double odlegloscDoLatarniPrzedPojazdem = obliczOdleglosc(rzeczywisteXPojazdu, rzeczywisteYPojazdu, rzeczywisteXLatarniPrzedPojazdem, rzeczywisteYLatarniPrzedPojazdem);
+        double odlegloscDoLatarniZaPojazdem = obliczOdleglosc(rzeczywisteXPojazdu, rzeczywisteYPojazdu, rzeczywisteXLatarniZaPojazdem, rzeczywisteYLatarniZaPojazdem);
+
+        String trescWiadomosciDoLatarniPrzedPojazdem = "ODLEGLOSC_DO_POJAZDU@" + odlegloscDoLatarniPrzedPojazdem +"@PRZED";
+        String trescWiadomosciDoLatarniZaPojazdem = "ODLEGLOSC_DO_POJAZDU@" + odlegloscDoLatarniZaPojazdem+"@ZA";
+
+        AID odbiorcaLatarniPrzedPojazdem = new AID(Konfiguracja.przedrostekAgentaCzujnikaPredkosci + (nrLatarniPrzedPojazdem + 1), AID.ISLOCALNAME);
+        AID odbiorcaLatarniaZaPojazdem = new AID(Konfiguracja.przedrostekAgentaCzujnikaPredkosci + (nrLatarniZaPojazdem + 1), AID.ISLOCALNAME);
+
+        ACLMessage wiadomoscDoLatarniPrzedPojazdem = new ACLMessage(ACLMessage.INFORM);
+        ACLMessage wiadomoscDoLatarniZaPojazdem = new ACLMessage(ACLMessage.INFORM);
+
+        wiadomoscDoLatarniPrzedPojazdem.addReceiver(odbiorcaLatarniPrzedPojazdem);
+        wiadomoscDoLatarniZaPojazdem.addReceiver(odbiorcaLatarniaZaPojazdem);
+        wiadomoscDoLatarniPrzedPojazdem.setContent(trescWiadomosciDoLatarniPrzedPojazdem);
+        wiadomoscDoLatarniZaPojazdem.setContent(trescWiadomosciDoLatarniZaPojazdem);
+
+        agentInterfejsu.send(wiadomoscDoLatarniPrzedPojazdem);
+        agentInterfejsu.send(wiadomoscDoLatarniZaPojazdem);
     }
 
     private void poinformujCzujnikRuchu(Trasa trasa, HashMap<String, Wierzcholek> mapaPowiazanWierzcholkow, AgentInterfejsu agentInterfejsu) {

@@ -1,5 +1,7 @@
 package inteligentne.oswietlenie.ulicy;
 
+import javafx.scene.paint.Color;
+
 import java.util.Map;
 
 public class Utils {
@@ -16,4 +18,24 @@ public class Utils {
 			return mapa.get(klucz);
 		return null;
 	}
+
+	public static String getColorIntensityString(int power){
+	    double powerValue = power/100d;
+	    double blue = 1.0d - powerValue;
+	    if (blue > 1.0d){
+	    	blue = 1.0d;
+		}else if (blue < 0.0d){
+	    	blue = 0.0d;
+		}
+		Color color = new Color(1,1,blue,0);
+		return toRGBCode(color);
+	}
+
+    public static String toRGBCode( Color color )
+    {
+        return String.format( "#%02X%02X%02X",
+                (int)( color.getRed() * 255 ),
+                (int)( color.getGreen() * 255 ),
+                (int)( color.getBlue() * 255 ) );
+    }
 }
