@@ -55,7 +55,7 @@ public class ModulSterujacy extends Agent {
             Double parametr = wspolczynnikAnalizyParametrow.get(entry.getKey());
             Double wspRuchu = wspolczynnikAnalizyRuchu.get(entry.getKey());
 
-            double temp = 0;
+            double temp;
             if (parametr != null && wspRuchu != null)
                 temp = (500 - wspRuchu) * parametr / 500;
             else
