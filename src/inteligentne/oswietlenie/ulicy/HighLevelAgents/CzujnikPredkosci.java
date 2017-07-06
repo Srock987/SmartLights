@@ -20,25 +20,37 @@ public class CzujnikPredkosci extends Agent{
      *
      */
     private static final long serialVersionUID = 1L;
-    private HashMap<String, Double> predkosciObiektow;
+    private HashMap<String, Double> odleglosciObiektow;
+    private HashMap<String, Double> predkosciOkiektow;
+    private HashMap<String, Double> parametryObiektow;
 	private AID modulAnalizyRuchu;
 
     @Override
     protected void setup(){
         znajdzModulAnalizyRuchu();
-        predkosciObiektow = new HashMap<>();
+        odleglosciObiektow = new HashMap<>();
+        predkosciOkiektow = new HashMap<>();
+        parametryObiektow = new HashMap<>();
         addBehaviour(new SterownikCzujnikaPredkosci(this));
         addBehaviour(new UdostepnieniePomiaru(this, Konfiguracja.czasOdswiezaniaWMilisekundach));
     }
 
-    public Map<String, Double> pobierzPredkosci() {
-        return predkosciObiektow;
+    public Map<String, Double> pobierzOdleglosci() {
+        return odleglosciObiektow;
     }
     
-	public void aktualizujOdleglosciObiektow(HashMap<String, Double> predkosciObiektow) {
-		this.predkosciObiektow = predkosciObiektow;
-		
+	public void aktualizujOdleglosciObiektow(HashMap<String, Double> odleglosciObiektow) {
+        obliczPredkosciObiektow(odleglosciObiektow);
+		this.odleglosciObiektow = odleglosciObiektow;
+		parametryObiektow.put("1",this.odleglosciObiektow.get("1"));
+		parametryObiektow.put("2",predkosciOkiektow.get("2"));
 	}
+
+	private void obliczPredkosciObiektow(HashMap<String, Double> noweOdleglosciObiektow){
+        if (odleglosciObiektow.size()!=0) {
+            predkosciOkiektow.put("2", odleglosciObiektow.get("1") - noweOdleglosciObiektow.get("1"));
+        }
+    }
 
     private void znajdzModulAnalizyRuchu() {
         DFAgentDescription template = new DFAgentDescription();
@@ -75,7 +87,7 @@ public class CzujnikPredkosci extends Agent{
 	            ACLMessage wiadomosc = new ACLMessage(ACLMessage.INFORM);
 	            wiadomosc.addReceiver(modulAnalizyRuchu);
 				try{
-		            wiadomosc.setContentObject(predkosciObiektow);
+		            wiadomosc.setContentObject(parametryObiektow);
 		            myAgent.send(wiadomosc);
 				} catch (Exception e) {
 					e.printStackTrace(System.out);

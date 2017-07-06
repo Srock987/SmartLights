@@ -25,14 +25,12 @@ public class SterownikCzujnikaPredkosci extends CyclicBehaviour {
 
           Double odleglosc = Double.parseDouble(msg.getContent().replace("ODLEGLOSC_DO_POJAZDU@", ""));
 
-    	  HashMap<String, Double> predkosciObiektow = new HashMap<>();
+    	  HashMap<String, Double> odleglosciObiektow = new HashMap<>();
           if (odleglosc < maxZasiegCzujnika) {
             Logger.info(msg.getContent());
-
-            predkosciObiektow.put("1", odleglosc);
+            odleglosciObiektow.put("1", odleglosc);
           }
-          czujnik.aktualizujOdleglosciObiektow(predkosciObiektow);
-
+          czujnik.aktualizujOdleglosciObiektow(odleglosciObiektow);
         }
         else {
           block();

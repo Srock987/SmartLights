@@ -30,9 +30,9 @@ public class ModulAnalizyRuchu extends Agent{
 	
 	private static final String nazwa = "Modul Analizy Ruchu";
 	
-    private Map<String, HashMap<String, Double>> mapaOdleglosciObiektow;
-    private Map<String, HashMap<String, Double>> mapaPredkosciObiektow;
-    private HashMap<String, Double> mapaWspolczynnikow;
+    private HashMap<String, Double> mapaOdleglosciPieszych;
+    private HashMap<String,HashMap<String, Double>> mapaParametrowPojazdow;
+    private HashMap<String, HashMap<String, Double>> mapaWspolczynnikow;
 	private AID modulSterujacy;
 
     @Override
@@ -40,8 +40,8 @@ public class ModulAnalizyRuchu extends Agent{
         zarejestrujUsluge();
         znajdzModulSterujacy();
         mapaWspolczynnikow = new HashMap<>();
-        mapaOdleglosciObiektow = new HashMap<>();
-        mapaPredkosciObiektow = new HashMap<>();
+        mapaOdleglosciPieszych = new HashMap<>();
+        mapaParametrowPojazdow = new HashMap<>();
         addBehaviour(new PobieranieDanych());
         addBehaviour(new UdostepnianieDanych(this, Konfiguracja.czasOdswiezaniaWMilisekundach));
     }
@@ -80,14 +80,15 @@ public class ModulAnalizyRuchu extends Agent{
     
     private void analizaDanych() {
     	Set<String> nazwyLatarni = new HashSet<String>();
-    	nazwyLatarni.addAll(mapaOdleglosciObiektow.keySet());
-    	nazwyLatarni.addAll(mapaPredkosciObiektow.keySet());
+    	nazwyLatarni.addAll(mapaOdleglosciPieszych.keySet());
+    	nazwyLatarni.addAll(mapaParametrowPojazdow.keySet());
     	
         for(String latarnia: nazwyLatarni){
-        	Double pieszy = Utils.getValueOrNull(mapaOdleglosciObiektow.get(latarnia), "1");
-        	Double pojazd = Utils.getValueOrNull(mapaPredkosciObiektow.get(latarnia), "1");
-        	Double odleglosc = Utils.min(pieszy, pojazd);
-        	mapaWspolczynnikow.put(latarnia, odleglosc);
+//        	Double pieszyOdleglosc = Utils.getValueOrNull(mapaOdleglosciPieszych.get(latarnia));
+//        	Double pojazdOdleglosc = Utils.getValueOrNull(mapaParametrowPojazdow.get(latarnia), "1");
+//        	Double pojazdPredkosc = Utils.getValueOrNull(mapaParametrowPojazdow.get(latarnia),"2");
+//        	Double odleglosc = Utils.min(pieszyOdleglosc, pojazdOdleglosc);
+        	mapaWspolczynnikow.put(latarnia,mapaParametrowPojazdow.get(latarnia));
         }
     }
 
@@ -115,10 +116,10 @@ public class ModulAnalizyRuchu extends Agent{
 					
 					if(Pattern.matches(Konfiguracja.przedrostekAgentaCzujnikaRuchu + ".*", nadawca)){
 						numer = nadawca.replace(Konfiguracja.przedrostekAgentaCzujnikaRuchu, "");
-						mapaOdleglosciObiektow.put(numer, mapa);
+//						mapaOdleglosciPieszych.put(numer, mapa);
 					}else if(Pattern.matches(Konfiguracja.przedrostekAgentaCzujnikaPredkosci + ".*", nadawca)){
 						numer = nadawca.replace(Konfiguracja.przedrostekAgentaCzujnikaPredkosci, "");
-						mapaPredkosciObiektow.put(numer, mapa);
+						mapaParametrowPojazdow.put(numer, mapa);
 					}
 					else{
 						throw new Exception("Nieznany nadawca wiadomo�ci:" + msg.getSender().getName());

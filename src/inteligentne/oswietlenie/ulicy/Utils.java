@@ -2,6 +2,7 @@ package inteligentne.oswietlenie.ulicy;
 
 import javafx.scene.paint.Color;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Utils {
@@ -18,6 +19,16 @@ public class Utils {
 			return mapa.get(klucz);
 		return null;
 	}
+
+	public static <T,V> Double getDoubleOrNull(HashMap<T,HashMap<V,Double>> map, T outerKey, V innerKey){
+		if (map != null && map.containsKey(outerKey)) {
+			if (map.get(outerKey).containsKey(innerKey)) {
+				return map.get(outerKey).get(innerKey);
+			}
+		}
+		return null;
+	}
+
 
 	public static String getColorIntensityString(int power){
 	    double powerValue = power/100d;
